@@ -5,22 +5,26 @@ const listData = ref([
   {
     img:"http://localhost:5173/src/assets/img/verify.png",
     title:"身份认证",
-    content:"未认证"
+    content:"未认证",
+    path:"/verify"
   },
   {
     img:"http://localhost:5173/src/assets/img/order.png",
     title:"订单列表",
-    content:""
+    content:"",
+    path:"/order"
   },
   {
     img:"http://localhost:5173/src/assets/img/security.png",
     title:"安全中心",
-    content:""
+    content:"",
+    path:'/security'
   },
   {
     img:"http://localhost:5173/src/assets/img/setting.png",
     title:"设置",
-    content:""
+    content:"",
+    path:"/setting"
   },
 ])
 
