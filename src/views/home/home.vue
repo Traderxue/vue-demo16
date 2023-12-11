@@ -129,7 +129,7 @@ onMounted(()=>{
 .home {
   width: auto;
   height: auto;
-  padding: 15px;
+  padding: 15px 15px 70px 15px;
   font-size: 15px;
   .header {
     width: auto;
