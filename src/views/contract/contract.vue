@@ -1,6 +1,9 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { getDepath } from "@/api/huobi.js";
+import { useRouter } from "vue-router";
+
+const router = useRouter()
 
 const active = ref("buy");
 const activeBtn = ref("买入");
@@ -29,6 +32,11 @@ const getDepaths = async () => {
 setInterval(() => {
   getDepaths();
 }, 2000);
+
+
+const goPosition = () =>{
+  router.push("/position")
+}
 
 onMounted(() => {
   getDepaths();
@@ -90,7 +98,7 @@ onMounted(() => {
     <div class="position">
       <div class="title">
         <p>当前持仓</p>
-        <div>
+        <div @click="goPosition">
           <p>全部</p>
           <span class="material-symbols-outlined"> chevron_right </span>
         </div>
