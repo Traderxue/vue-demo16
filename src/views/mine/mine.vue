@@ -1,33 +1,38 @@
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 const listData = ref([
   {
-    img:"http://localhost:5173/src/assets/img/verify.png",
-    title:"身份认证",
-    content:"未认证",
-    path:"/verify"
+    img: "http://localhost:5173/src/assets/img/verify.png",
+    title: "身份认证",
+    content: "未认证",
+    path: "/verify",
   },
   {
-    img:"http://localhost:5173/src/assets/img/order.png",
-    title:"订单列表",
-    content:"",
-    path:"/order"
+    img: "http://localhost:5173/src/assets/img/order.png",
+    title: "订单列表",
+    content: "",
+    path: "/order",
   },
   {
-    img:"http://localhost:5173/src/assets/img/security.png",
-    title:"安全中心",
-    content:"",
-    path:'/security'
+    img: "http://localhost:5173/src/assets/img/security.png",
+    title: "安全中心",
+    content: "",
+    path: "/security",
   },
   {
-    img:"http://localhost:5173/src/assets/img/setting.png",
-    title:"设置",
-    content:"",
-    path:"/setting"
+    img: "http://localhost:5173/src/assets/img/setting.png",
+    title: "设置",
+    content: "",
+    path: "/setting",
   },
-])
+]);
 
+const goTab = (item) => {
+  router.push(item.path);
+};
 </script>
 
 
@@ -64,13 +69,18 @@ const listData = ref([
       </div>
     </div>
     <div class="assets">
-      <div class="box" v-for="(item,index) in listData" :key="index">
+      <div
+        class="box"
+        v-for="(item, index) in listData"
+        :key="index"
+        @click="goTab(item)"
+      >
         <div>
           <img :src="item.img" alt="" />
-          <span>{{item.title}}</span>
+          <span>{{ item.title }}</span>
         </div>
         <div>
-          <p>{{item.content}}</p>
+          <p>{{ item.content }}</p>
           <span class="material-symbols-outlined"> chevron_right </span>
         </div>
       </div>
@@ -164,21 +174,21 @@ const listData = ref([
     box-sizing: border-box;
     padding: 20px 10%;
     border-radius: 5px;
-    .box{
+    .box {
       display: flex;
       justify-content: space-between;
       padding-bottom: 5px;
       margin: 10px 0px;
-      div{
+      div {
         display: flex;
         align-items: center;
         font-size: 14px;
-        img{
+        img {
           width: 25px;
           height: 25px;
           margin-right: 5px;
         }
-        p{
+        p {
           color: #00b8a9;
           font-size: 13px;
         }
