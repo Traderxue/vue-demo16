@@ -17,7 +17,21 @@ const router = createRouter({
         },
         {
           path:"/quote",
-          component:()=>import("@/views/quote/quote.vue")
+          component:()=>import("@/views/quote/quote.vue"),
+          children:([
+            {
+              path:"",
+              component:()=>import("@/views/quote/component/usdt.vue")
+            },
+            {
+              path:"/usdt",
+              component:()=>import("@/views/quote/component/usdt.vue")
+            },
+            {
+              path:"/optional",
+              component:()=>import("@/views/quote/component/optional.vue")
+            }
+          ])
         },
         {
           path:"/contract",

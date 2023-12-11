@@ -1,12 +1,23 @@
 <script setup>
 import { ref } from "vue";
+import {showToast} from "vant"
 
 const active = ref(0);
+const loading = ref(false);
+    const onRefresh = () => {
+      window.location.reload()
+      setTimeout(() => {
+        showToast('刷新成功');
+        loading.value = false;
+      }, 1000);
+    };
 </script>
 
 <template>
   <div class="index">
-    <RouterView />
+    <van-pull-refresh v-model="loading" @refresh="onRefresh">
+      <RouterView />
+    </van-pull-refresh>
     <van-tabbar v-model="active" route>
       <van-tabbar-item to="/home">
         <span class="material-symbols-outlined"> home </span
