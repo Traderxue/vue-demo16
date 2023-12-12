@@ -1,67 +1,174 @@
 <script setup>
-import {getDetail} from "@/api/huobi.js"
-import { onMounted, ref } from "vue"
+import { getDetail } from "@/api/huobi.js";
+import i18n from "@/lang/index.js";
+import { onMounted, ref } from "vue";
+
+const showLeft = ref(false);
+const showTop = ref(false);
+
+const curentLang = ref("zh_cn");
+
+const langList = ref([
+  {
+    title: "中文简体",
+    lang: "zh_cn",
+  },
+  {
+    title: "中文繁体",
+    lang: "zh_hk",
+  },
+  {
+    title: "English",
+    lang: "en",
+  },
+]);
 
 const typeList = ref([
-    {
-        type:"btc",
-        price:"",
-        parcent:"",
-        up:0
-    },
-    {
-        type:"eth",
-        price:"",
-        parcent:"",
-        up:0
-    },
-    {
-        type:"sol",
-        price:"",
-        parcent:"",
-        up:0
-    },
-    {
-        type:"ht",
-        price:"",
-        parcent:"",
-        up:0
-    },
-    {
-        type:"ape",
-        price:"",
-        parcent:"",
-        up:0
-    },
-])
+  {
+    type: "btc",
+    price: "",
+    parcent: "",
+    up: 0,
+  },
+  {
+    type: "eth",
+    price: "",
+    parcent: "",
+    up: 0,
+  },
+  {
+    type: "sol",
+    price: "",
+    parcent: "",
+    up: 0,
+  },
+  {
+    type: "ht",
+    price: "",
+    parcent: "",
+    up: 0,
+  },
+  {
+    type: "ape",
+    price: "",
+    parcent: "",
+    up: 0,
+  },
+]);
 
-const getDetails =  ()=>{
-    typeList.value.forEach(async item=>{
-        const {data:res} = await getDetail(item.type)
-        item.price = res.tick.close,
-        item.parcent = ((res.tick.close - res.tick.open)/res.tick.open*100).toFixed(2)
-        if(item.parcent>0){
-            item.up=1
-        }
-        return item
-    })
+const getDetails = () => {
+  typeList.value.forEach(async (item) => {
+    const { data: res } = await getDetail(item.type);
+    (item.price = res.tick.close),
+      (item.parcent = (
+        ((res.tick.close - res.tick.open) / res.tick.open) *
+        100
+      ).toFixed(2));
+    if (item.parcent > 0) {
+      item.up = 1;
+    }
+    return item;
+  });
+};
+
+setInterval(() => {
+  getDetails();
+}, 2000);
+
+const showMenu = () => {
+  showLeft.value = true;
+};
+
+const showLang = () => {
+  showTop.value = true;
+};
+
+const changeLang = (item) =>{
+  curentLang.value = item.lang
+  showTop.value = false
+  i18n.global.locale = item.lang
 }
 
-setInterval(()=>{
-    getDetails()
-},2000)
-
-onMounted(()=>{
-    getDetails()
-})
-
+onMounted(() => {
+  getDetails();
+});
 </script>
 
 <template>
   <div class="home">
     <div class="header">
-      <span class="material-symbols-outlined"> menu </span><span>首页</span
-      ><span class="material-symbols-outlined"> language </span>
+      <span class="material-symbols-outlined" @click="showMenu"> menu </span>
+      <van-popup
+        v-model:show="showLeft"
+        position="left"
+        :style="{ width: '60%', height: '100%' }"
+      >
+        <div class="menu">
+          <div class="acvator">
+            <img src="@/assets/img/banner1.png" alt="" />
+            <p>欢迎来到BTXC</p>
+          </div>
+          <div class="login"><a>登录</a><a>注册</a></div>
+          <div class="list">
+            <div class="per">
+              <div>
+                <img src="@/assets/img/tixian.png" alt="" /><span>提现</span>
+              </div>
+              <span class="material-symbols-outlined"> chevron_right </span>
+            </div>
+            <div class="per">
+              <div>
+                <img src="@/assets/img/cz.png" alt="" /><span>充值</span>
+              </div>
+              <span class="material-symbols-outlined"> chevron_right </span>
+            </div>
+            <div class="per">
+              <div>
+                <img src="@/assets/img/verify.png" alt="" /><span
+                  >身份认证</span
+                >
+              </div>
+              <span class="material-symbols-outlined"> chevron_right </span>
+            </div>
+            <div class="per">
+              <div>
+                <img src="@/assets/img/security.png" alt="" /><span
+                  >安全中心</span
+                >
+              </div>
+              <span class="material-symbols-outlined"> chevron_right </span>
+            </div>
+            <div class="per">
+              <div>
+                <img src="@/assets/img/setting.png" alt="" /><span>设置</span>
+              </div>
+              <span class="material-symbols-outlined"> chevron_right </span>
+            </div>
+          </div>
+        </div>
+      </van-popup>
+      <span>{{$t('home.title')}}</span
+      ><span class="material-symbols-outlined" @click="showLang">
+        language
+      </span>
+      <van-popup
+        v-model:show="showTop"
+        position="top"
+        :style="{ height: '30%' }"
+      >
+        <div class="lang">
+          <div v-for="(item, index) in langList" :key="index" @click="changeLang(item)">
+            <span>{{item.title}}</span
+            ><span
+              class="material-symbols-outlined"
+              style="color: #2979FF; font-weight: 600;"
+              v-if="curentLang == item.lang"
+            >
+              done
+            </span>
+          </div>
+        </div>
+      </van-popup>
     </div>
     <div class="banner">
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
@@ -115,10 +222,18 @@ onMounted(()=>{
         <span style="text-align: right">涨跌幅</span>
       </div>
       <div class="box">
-        <div v-for="(item,index) in typeList" :key="index">
-            <span>{{item.type.toUpperCase()}}/USDT</span>
-        <span style="text-align: center" :class="item.up==1?'up':'down'">{{item.price}}</span>
-        <span style="text-align: right"><button :class="item.up==1?'up_btn':'down_btn'">{{item.parcent}}%</button></span>
+        <div v-for="(item, index) in typeList" :key="index">
+          <span>{{ item.type.toUpperCase() }}/USDT</span>
+          <span
+            style="text-align: center"
+            :class="item.up == 1 ? 'up' : 'down'"
+            >{{ item.price }}</span
+          >
+          <span style="text-align: right"
+            ><button :class="item.up == 1 ? 'up_btn' : 'down_btn'">
+              {{ item.parcent }}%
+            </button></span
+          >
         </div>
       </div>
     </div>
@@ -137,6 +252,66 @@ onMounted(()=>{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    .menu {
+      padding: 30px 10%;
+      display: flex;
+      justify-content: space-around;
+      flex-direction: column;
+      font-size: 14px;
+      .acvator {
+        margin: 10px 0px;
+        img {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+        }
+        p {
+          font-size: 13px;
+        }
+      }
+      .login {
+        display: flex;
+        a {
+          font-size: 15px;
+          margin-right: 40px;
+          color: #2779ff;
+        }
+      }
+      .list {
+        margin-top: 40px;
+        display: flex;
+        justify-content: space-around;
+        flex-direction: column;
+        .per {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin: 10px 0px;
+          div {
+            display: flex;
+            align-items: center;
+            img {
+              width: 25px;
+              height: 25px;
+              margin-right: 5px;
+            }
+          }
+        }
+      }
+    }
+    .lang{
+      padding: 20px;
+      display: flex;
+      justify-content: space-around;
+      flex-direction: column;
+      font-size: 14px;
+      div{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0px;
+      }
+    }
   }
   hr {
     height: 10px;
@@ -261,11 +436,11 @@ onMounted(()=>{
             font-size: 13px;
           }
         }
-        .up{
-            color: #00b8a9;
+        .up {
+          color: #00b8a9;
         }
-        .down{
-            color: #e84545;
+        .down {
+          color: #e84545;
         }
         .up_btn {
           background: #00b8a9;
